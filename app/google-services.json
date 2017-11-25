@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "732285534754",
+    "firebase_url": "https://novelreader-99.firebaseio.com",
+    "project_id": "novelreader-99",
+    "storage_bucket": "novelreader-99.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:732285534754:android:ffdc4fc57b25993c",
+        "android_client_info": {
+          "package_name": "com.amoeba99.novelreader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "732285534754-c3g50k184meg389udnbp5cur54s5e2td.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.amoeba99.novelreader",
+            "certificate_hash": "691a86f562aa9897aee85c310a65de8bcd5fea4a"
+          }
+        },
+        {
+          "client_id": "732285534754-7s2l0mf3rs5f01m08an81ehqjkgoe7q3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwCQWvJYg_vCtHSEKBw8TmX4TmYwHFHS4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "732285534754-7s2l0mf3rs5f01m08an81ehqjkgoe7q3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

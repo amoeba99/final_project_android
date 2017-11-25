@@ -1,9 +1,11 @@
 package com.amoeba99.novelreader.adapter;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ public class MainPageAdapter extends RecyclerView.Adapter<MainPageAdapter.Search
 
     private List<Novel> data;
     private Context context;
+    private OnItemClicked onClick;
 
     public MainPageAdapter(Context context) {
         this.context = context;
@@ -41,11 +44,15 @@ public class MainPageAdapter extends RecyclerView.Adapter<MainPageAdapter.Search
     }
 
     @Override
-    public void onBindViewHolder(SearchResultHolder holder, int position) {
-        Novel novel = data.get(position);
-        holder.textName.setText(novel.getName());
+    public void onBindViewHolder(SearchResultHolder holder, final int position) {
+        holder.textName.setText(this.data.get(position).getName());
         Glide.with(context).load(this.data.get(position).getImg()).into(holder.imgUrl);
-
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClick.onItemClick(position);
+            }
+        });
     }
 
     @Override
@@ -55,7 +62,6 @@ public class MainPageAdapter extends RecyclerView.Adapter<MainPageAdapter.Search
         return 0;
     }
 
-
     public static class SearchResultHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.img)
@@ -64,9 +70,20 @@ public class MainPageAdapter extends RecyclerView.Adapter<MainPageAdapter.Search
         @BindView(R.id.name)
         public TextView textName;
 
+        @BindView(R.id.layout)
+        public ConstraintLayout layout;
+
         public SearchResultHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public interface OnItemClicked{
+        void onItemClick(int position);
+    }
+
+    public void setOnClick(OnItemClicked onClick) {
+        this.onClick = onClick;
     }
 }
