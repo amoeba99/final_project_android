@@ -10,7 +10,7 @@
         >
         <menu>
             <item
-                android:id="@+id/login"
+                android:id="@+id/log"
                 android:title="Login"/>
         </menu>
     </item>

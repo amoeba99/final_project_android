@@ -1,7 +1,6 @@
 package com.amoeba99.novelreader.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,37 +8,30 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Button;
 
 import com.amoeba99.novelreader.R;
 import com.amoeba99.novelreader.adapter.MainPageAdapter;
 import com.amoeba99.novelreader.model.Novel;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements MainPageAdapter.OnItemClicked {
-    CallbackManager callbackManager;
+public class MainActivity extends AppCompatActivity implements MainPageAdapter.OnItemClicked{
 
     @BindView(R.id.recyclerView)
     public RecyclerView list;
@@ -48,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements MainPageAdapter.O
     private DatabaseReference userRef = rootRef.child("users");
     private String name;
     private MainPageAdapter adapter;
+    private MenuItem login;
+    private CallbackManager callbackManager;
+    private CookieManager cm = CookieManager.getInstance();
 
     List<Novel> novel = new ArrayList<>();
 
@@ -62,9 +57,7 @@ public class MainActivity extends AppCompatActivity implements MainPageAdapter.O
         list.setLayoutManager(new GridLayoutManager(this, 2));
         list.setAdapter(adapter);
         callbackManager = CallbackManager.Factory.create();
-        CookieSyncManager.createInstance(this);
-        CookieManager cm = CookieManager.getInstance();
-        cm.removeAllCookie();
+        callBackLogin();
         refresh();
     }
     @Override
@@ -76,59 +69,71 @@ public class MainActivity extends AppCompatActivity implements MainPageAdapter.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        login = menu.findItem(R.id.log);
+        setMenu();
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-
-            /*case R.id.android:
-                user = "android";
-                refresh(user, mode);
-                return true;
-            case R.id.nature:
-                user = "nature";
-                refresh(user, mode);
-                return true;
-            case R.id.cartoon:
-                user = "cartoon";
-                refresh(user, mode);
-                return true;
-            case R.id.switch_mode:
-                if(mode.equals("grid")){
-                    mode = "list";
-                    postAdapter.setLayout(R.layout.item_list);
-                }else {
-                    mode = "grid";
-                    postAdapter.setLayout(R.layout.item_grid);
-                }
-                return true;*/
+            case R.id.log:
+                if(isLogin())
+                    logout();
+                else
+                    login();
+                refresh();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void refresh(){
-        if(AccessToken.getCurrentAccessToken() != null){
-        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        try {
-                            name = object.getString("name");
-                        } catch (JSONException e) {
-                            // TODO Auto-generated catch block
-                            //  e.printStackTrace();
+    public void logout(){
+        LoginManager.getInstance().logOut();
+        login.setTitle("Login");
+        cm.removeAllCookie();
+    }
+
+    public void login(){
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+    }
+
+    public boolean isLogin(){
+        if(AccessToken.getCurrentAccessToken() == null)
+            return false;
+        else
+            return true;
+    }
+
+    public void callBackLogin(){
+            LoginManager.getInstance().registerCallback(callbackManager,
+                    new FacebookCallback<LoginResult>() {
+                        @Override
+                        public void onSuccess(LoginResult loginResult) {
+                            setMenu();
                         }
 
-                    }
+                        @Override
+                        public void onCancel() {
+                            //checkLogin();
+                        }
 
-                });
+                        @Override
+                        public void onError(FacebookException exception) {
+                            // App code
+                        }
+                    });
+    }
 
-        request.executeAsync();}
+    public void refresh(){
+        setData();
+    }
+
+    public void setData(){
         rootRef.child("novel").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                novel = new ArrayList<>();
                 for(DataSnapshot data : dataSnapshot.getChildren()){
                     novel.add(new Novel(data.getKey(), data.child("name").getValue().toString(), data.child("img").getValue().toString()));
                 }
@@ -146,5 +151,18 @@ public class MainActivity extends AppCompatActivity implements MainPageAdapter.O
         Intent intent = new Intent(this, NovelPageActivity.class);
         intent.putExtra("key", novel.get(position).getKey());
         startActivity(intent);
+    }
+
+    public void setMenu(){
+        if(isLogin())
+            login.setTitle("Logout");
+        else
+            login.setTitle("Login");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setMenu();
     }
 }
