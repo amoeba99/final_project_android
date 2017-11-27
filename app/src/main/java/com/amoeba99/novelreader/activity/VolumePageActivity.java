@@ -12,7 +12,11 @@ import android.widget.TextView;
 import com.amoeba99.novelreader.R;
 import com.amoeba99.novelreader.model.Volume;
 import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 
 import java.util.Arrays;
 
@@ -33,6 +37,7 @@ public class VolumePageActivity extends AppCompatActivity {
     private Volume vol;
     private MenuItem login;
     private CookieManager cm = CookieManager.getInstance();
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +46,36 @@ public class VolumePageActivity extends AppCompatActivity {
         ButterKnife.bind(this, this);
         Intent intent = getIntent();
         vol = intent.getParcelableExtra("vol");
+        callbackManager = CallbackManager.Factory.create();
+        callBackLogin();
         refresh(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    public void callBackLogin(){
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        setMenu();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        //checkLogin();
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                    }
+                });
     }
 
     public void refresh(final Context context){
@@ -78,7 +112,6 @@ public class VolumePageActivity extends AppCompatActivity {
 
     public void login(){
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-        login.setTitle("Logout");
     }
 
     public boolean isLogin(){
