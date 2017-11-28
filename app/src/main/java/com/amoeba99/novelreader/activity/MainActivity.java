@@ -1,7 +1,11 @@
 package com.amoeba99.novelreader.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,8 +42,6 @@ public class MainActivity extends AppCompatActivity implements MainPageAdapter.O
     public RecyclerView list;
 
     private DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference userRef = rootRef.child("users");
-    private String name;
     private MainPageAdapter adapter;
     private MenuItem login;
     private CallbackManager callbackManager;

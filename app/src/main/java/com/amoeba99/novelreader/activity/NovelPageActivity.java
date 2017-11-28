@@ -2,6 +2,9 @@ package com.amoeba99.novelreader.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
@@ -35,20 +38,24 @@ import com.amoeba99.novelreader.R;
 import com.amoeba99.novelreader.adapter.NovelPageAdapter;
 import com.amoeba99.novelreader.model.Volume;
 import com.bumptech.glide.Glide;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.share.Sharer;
+
 import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,7 +100,6 @@ public class NovelPageActivity extends AppCompatActivity implements NovelPageAda
     private MenuItem login;
     private int your_score = 0;
     private ShareLinkContent content;
-
     private static String APP_KEY = "1938649856401879";
     private static String BASE_DOMAIN = "http://www.catreturn.net";
     private static String PATH_URL;
@@ -121,27 +127,6 @@ public class NovelPageActivity extends AppCompatActivity implements NovelPageAda
         callBackLogin();
         refresh(this);
     }
-
-    private FacebookCallback<Sharer.Result> callback = new FacebookCallback<Sharer.Result>() {
-        @Override
-        public void onSuccess(Sharer.Result result) {
-            Log.v(TAG, "Successfully posted");
-            // Write some code to do some operations when you shared content successfully.
-        }
-
-        @Override
-        public void onCancel() {
-            Log.v(TAG, "Sharing cancelled");
-            // Write some code to do some operations when you cancel sharing content.
-        }
-
-        @Override
-        public void onError(FacebookException error) {
-            Log.v(TAG, error.getMessage());
-            // Write some code to do some operations when some error occurs while sharing content.
-        }
-    };
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -232,6 +217,8 @@ public class NovelPageActivity extends AppCompatActivity implements NovelPageAda
                 totalscore = Double.parseDouble(dataSnapshot.child("totalscore").getValue().toString());
                 count = Double.parseDouble(dataSnapshot.child("count").getValue().toString());
                 Glide.with(context).load(imgUrl).into(img);
+
+
                 content = new ShareLinkContent.Builder().setContentUrl(Uri.parse(imgUrl)).setImageUrl(Uri.parse(imgUrl)).setQuote(describe).build();
                 shareButton.setShareContent(content);
                 setScore();
