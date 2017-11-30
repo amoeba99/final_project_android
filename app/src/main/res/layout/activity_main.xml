@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.amoeba99.novelreader.activity.MainActivity"
-    android:background="@color/bgcontent">
+    android:background="@color/bgcontent"
+    tools:context="com.amoeba99.novelreader.activity.MainActivity">
 
 
     <android.support.v7.widget.RecyclerView

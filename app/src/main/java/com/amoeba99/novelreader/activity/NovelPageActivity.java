@@ -2,9 +2,6 @@ package com.amoeba99.novelreader.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
@@ -31,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -47,8 +45,6 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
 import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -198,7 +194,7 @@ public class NovelPageActivity extends AppCompatActivity implements NovelPageAda
     }
 
     public void checkForVote(){
-        if(AccessToken.getCurrentAccessToken() != null) {
+        if(AccessToken.getCurrentAccessToken() == null) {
             loginLayout.setVisibility(View.VISIBLE);
         }
         else {
@@ -286,7 +282,7 @@ public class NovelPageActivity extends AppCompatActivity implements NovelPageAda
         cm.setAcceptThirdPartyCookies(webView, true);
         webView.loadDataWithBaseURL(BASE_DOMAIN,
                 "<html><head></head><body><div id=\"fb-root\"></div><div id=\"fb-root\"></div><script>(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = \"http://connect.facebook.net/en_US/all.js#xfbml=1&appId="+APP_KEY+ "\";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));</script><div class=\"fb-comments\" data-href=\""
-                        +BASE_DOMAIN+PATH_URL+"\" data-numposts=\""+NUMBER_OF_COMMENTS+"\" data-width=\"470\"></div> </body></html>", "text/html", null, null);
+                        +BASE_DOMAIN+PATH_URL+"\" data-numposts=\""+NUMBER_OF_COMMENTS+"\" data-order-by=\"reverse_time\" data-width=\"480\"></div> </body></html>", "text/html", null, null);
     }
 
     private class UriWebViewClient extends WebViewClient {
@@ -389,7 +385,7 @@ public class NovelPageActivity extends AppCompatActivity implements NovelPageAda
     }
 
     public boolean isLogin(){
-        if(AccessToken.getCurrentAccessToken() == null)
+        if(AccessToken.getCurrentAccessToken() != null)
             return false;
         else
             return true;

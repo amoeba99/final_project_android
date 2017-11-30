@@ -1,18 +1,14 @@
 package com.amoeba99.novelreader.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
+import android.widget.TextView;
 
 import com.amoeba99.novelreader.R;
 import com.amoeba99.novelreader.adapter.MainPageAdapter;
@@ -62,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements MainPageAdapter.O
         callbackManager = CallbackManager.Factory.create();
         callBackLogin();
         refresh();
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
