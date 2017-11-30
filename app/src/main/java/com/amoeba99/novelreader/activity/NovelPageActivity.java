@@ -28,7 +28,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -194,7 +193,7 @@ public class NovelPageActivity extends AppCompatActivity implements NovelPageAda
     }
 
     public void checkForVote(){
-        if(AccessToken.getCurrentAccessToken() == null) {
+        if(AccessToken.getCurrentAccessToken() != null) {
             loginLayout.setVisibility(View.VISIBLE);
         }
         else {
@@ -385,7 +384,7 @@ public class NovelPageActivity extends AppCompatActivity implements NovelPageAda
     }
 
     public boolean isLogin(){
-        if(AccessToken.getCurrentAccessToken() != null)
+        if(AccessToken.getCurrentAccessToken() == null)
             return false;
         else
             return true;

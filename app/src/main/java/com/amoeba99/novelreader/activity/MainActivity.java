@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
-import android.widget.TextView;
 
 import com.amoeba99.novelreader.R;
 import com.amoeba99.novelreader.adapter.MainPageAdapter;
@@ -135,7 +134,8 @@ public class MainActivity extends AppCompatActivity implements MainPageAdapter.O
             public void onDataChange(DataSnapshot dataSnapshot) {
                 novel = new ArrayList<>();
                 for(DataSnapshot data : dataSnapshot.getChildren()){
-                    novel.add(new Novel(data.getKey(), data.child("name").getValue().toString(), data.child("img").getValue().toString()));
+                    novel.add(new Novel(data.getKey(), data.child("name").getValue().toString(), data.child("img").getValue().toString(), data.child("count").getValue().toString()
+                    , data.child("totalscore").getValue().toString()));
                 }
                 adapter.setData(novel);
                 adapter.notifyDataSetChanged();

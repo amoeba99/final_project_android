@@ -12,11 +12,15 @@ public class Novel {
     private String key;
     private String name;
     private String img;
+    private String count;
+    private String totalscore;
 
-    public Novel(String key, String name, String img) {
+    public Novel(String key, String name, String img, String count, String totalscore) {
         this.key = key;
         this.name = name;
         this.img = img;
+        this.count = count;
+        this.totalscore = totalscore;
     }
 
     public String getKey() {
@@ -41,5 +45,21 @@ public class Novel {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public String getTotalscore() {
+        return totalscore;
+    }
+
+    public void setTotalscore(String totalscore) {
+        this.totalscore = totalscore;
     }
 }
